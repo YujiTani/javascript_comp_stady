@@ -16,6 +16,7 @@ body {
   color: #eee;
   background-color: #222;
   /* background-color: #60b347; */
+  transition: all 1s ease;
 }
 
 /* LAYOUT */
@@ -27,7 +28,6 @@ header {
 
 main {
   height: 65vh;
-  color: #eee;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -67,6 +67,7 @@ h1 {
   bottom: 0;
   left: 50%;
   transform: translate(-50%, 50%);
+  transition: 0.2s;
 }
 
 .between {
