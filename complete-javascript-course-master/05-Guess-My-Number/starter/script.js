@@ -8,8 +8,10 @@ let highscore = document.querySelector('.highscore');
 let guess = document.querySelector('.guess');
 let check = document.querySelector('.check');
 let again = document.querySelector('.again');
+let body = document.querySelector('body');
 
 let currentScore = 20;
+let currentHighscore = 0;
 let anserNum = '';
 const max = 20;
 //sound
@@ -34,12 +36,23 @@ const randomNum = x => {
   return Math.trunc(Math.random() * x) + 1;
 };
 
+const comparison = score => {
+  currentHighscore > score
+    ? (currentHighscore = currentHighscore)
+    : (currentHighscore = score);
+  return;
+};
+
+const displayMessage = message => {
+  clearMsg.textContent = message;
+};
+
 const init = () => {
   number.textContent = anserNum;
-  clearMsg.textContent = 'Start guessing...';
+  displayMessage('Start guessing...');
   guess.disabled = false;
-  document.querySelector('body').style.background = '#222';
-  document.querySelector('body').style.color = '#eee';
+  body.style.background = '#222';
+  body.style.color = '#eee';
   number.style.width = '15rem';
   currentScore = 20;
   score.textContent = currentScore;
@@ -52,44 +65,39 @@ anserNum = randomNum(max);
 
 check.addEventListener('click', () => {
   const guessNumber = Number(guess.value);
-  console.log('guess', typeof guessNumber);
-  console.log('anserNum', anserNum);
+  //   console.log('guess', typeof guessNumber);
+  //   console.log('anserNum', anserNum);
 
   if (currentScore <= 0) {
-    clearMsg.textContent = 'GAME OVER';
+    displayMessage('GAME OVER');
     return;
   }
 
   if (!guessNumber) {
     x;
-    clearMsg.textContent = '⛔️ No number!';
+    displayMessage('⛔️ No number!');
     // player win
   } else if (guessNumber === anserNum) {
     sound.play();
+    comparison(currentScore);
     number.textContent = anserNum;
-    clearMsg.textContent = '🎉 Correct Number!!';
-    highscore.textContent = currentScore;
+    displayMessage('🎉 Correct Number!!');
+    highscore.textContent = currentHighscore;
     guess.disabled = true;
-    document.querySelector('body').style.background = '#a7e8bd';
-    document.querySelector('body').style.color = '#404e7c';
+    body.style.background = '#a7e8bd';
+    body.style.color = '#404e7c';
     number.style.width = '30rem';
 
-    //number hight
-  } else if (guessNumber > anserNum) {
-    clearMsg.textContent = 'Too hight';
-    currentScore--;
-    score.textContent = currentScore;
-    //number low
-  } else if (guessNumber < anserNum) {
-    clearMsg.textContent = 'Too low';
-    currentScore--;
-    score.textContent = currentScore;
-  } else {
-    clearMsg.textContent = 'mistake...';
+    //Different numbers
+  } else if (guessNumber !== anserNum) {
+    guessNumber > anserNum
+      ? displayMessage('Too hight')
+      : displayMessage('Too low');
+
     currentScore--;
     score.textContent = currentScore;
   }
-
+  //again event
   again.addEventListener('click', () => {
     init();
   });
